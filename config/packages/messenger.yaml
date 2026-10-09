@@ -1,0 +1,15 @@
+framework:
+    messenger:
+        # Failure transport, retry strategy and the outbox relay arrive with settlement (week 4).
+        transports:
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            sync: 'sync://'
+
+        routing:
+            # 'App\Message\YourMessage': async
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async: 'in-memory://'
