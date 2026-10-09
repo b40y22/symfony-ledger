@@ -19,3 +19,4 @@
 /.phpunit.cache/
 ###< phpunit/phpunit ###
 
+.idea

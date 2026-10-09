@@ -9,6 +9,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
+
+use function in_array;
 
 final readonly class HealthController
 {
@@ -22,7 +25,7 @@ final readonly class HealthController
     public function __invoke(): JsonResponse
     {
         $checks = ['database' => $this->checkDatabase()];
-        $healthy = !\in_array('fail', $checks, true);
+        $healthy = !in_array('fail', $checks, true);
 
         return new JsonResponse(
             ['status' => $healthy ? 'ok' : 'fail', 'checks' => $checks],
@@ -39,7 +42,7 @@ final readonly class HealthController
             $this->connection->executeQuery('SELECT 1')->fetchOne();
 
             return 'ok';
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->error('Health check: database unreachable', ['exception' => $e]);
 
             return 'fail';

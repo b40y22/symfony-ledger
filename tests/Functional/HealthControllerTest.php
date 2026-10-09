@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class HealthControllerTest extends WebTestCase
@@ -26,7 +27,7 @@ final class HealthControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $connection = $this->createStub(Connection::class);
-        $connection->method('executeQuery')->willThrowException(new \RuntimeException('Connection refused'));
+        $connection->method('executeQuery')->willThrowException(new RuntimeException('Connection refused'));
         static::getContainer()->set('doctrine.dbal.default_connection', $connection);
 
         $client->request('GET', '/health');
